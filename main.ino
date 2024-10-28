@@ -2,10 +2,10 @@
 #include <Wire.h>
 #include <Adafruit_GFX.h>
 #include <Adafruit_SSD1306.h>
-#include <Adafruit_MCP23017.h>
+#include <Adafruit_MCP23X17.h>
 #include <Adafruit_SHT31.h>  // Add SHT31 library
 
-Adafruit_MCP23017 mcp;
+Adafruit_MCP23X17 mcp;
 Adafruit_SHT31 sht31 = Adafruit_SHT31();  // Initialize SHT31
 
 #define SCREEN_WIDTH 128 
@@ -45,7 +45,10 @@ void setup() {
     for (;;);
   }
 
-  mcp.begin(0); 
+  if (!mcp.begin_I2C()) {
+    Serial.println("Error.");
+    while (1);
+  }
   for (int i = 0; i < 8; i++) {
     mcp.pinMode(i, OUTPUT);
     mcp.pinMode(i + 8, OUTPUT);
